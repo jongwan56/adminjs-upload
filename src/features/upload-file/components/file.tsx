@@ -60,9 +60,17 @@ const File: FC<Props> = ({ width, record, property }) => {
     custom.fileNameProperty ? custom.fileNameProperty : custom.keyProperty,
   )
   const mimeType = custom.mimeTypeProperty && flat.get(record?.params, custom.mimeTypeProperty)
+  const defaultMimeType = custom.mimeTypes && custom.mimeTypes[0]
 
   if (!property.custom.multiple) {
-    return <SingleFile path={path} name={name} width={width} mimeType={mimeType} />
+    return (
+      <SingleFile
+        path={path}
+        name={name}
+        width={width}
+        mimeType={mimeType || defaultMimeType}
+      />
+    )
   }
 
   return (
@@ -73,7 +81,7 @@ const File: FC<Props> = ({ width, record, property }) => {
           path={singlePath}
           name={name[index]}
           width={width}
-          mimeType={mimeType[index]}
+          mimeType={mimeType[index] || defaultMimeType}
         />
       ))}
     </>

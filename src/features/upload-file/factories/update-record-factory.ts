@@ -97,6 +97,14 @@ export const updateRecordFactory = (
             ...uploadedFiles.map((file) => file.name),
           ])
         }
+        if (properties.filePath) {
+          params = flat.set(params, properties.filePath, [
+            ...(record.get(properties.filePath) || []),
+            ...await Promise.all(keys.map(async (key) => (
+              provider.path(key, provider.bucket, context)
+            ))),
+          ])
+        }
 
         await record.update(params)
 
@@ -120,6 +128,9 @@ export const updateRecordFactory = (
           ...properties.size && { [properties.size]: uploadedFile.size?.toString() },
           ...properties.mimeType && { [properties.mimeType]: uploadedFile.type },
           ...properties.filename && { [properties.filename]: uploadedFile.name as string },
+          ...properties.filePath && {
+            [properties.filePath]: await provider.path(key, provider.bucket, context),
+          },
         }
 
         await record.update(params)
@@ -152,6 +163,7 @@ export const updateRecordFactory = (
             ...properties.size && { [properties.size]: null },
             ...properties.mimeType && { [properties.mimeType]: null },
             ...properties.filename && { [properties.filename]: null },
+            ...properties.filePath && { [properties.filePath]: null },
           }
 
           await record.update(params)

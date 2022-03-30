@@ -10,7 +10,7 @@ export type DuplicateOccurrence = {
  *
  * @private
  */
-export const DB_PROPERTIES = ['key', 'bucket', 'size', 'mimeType', 'filename'] as const
+export const DB_PROPERTIES = ['key', 'bucket', 'size', 'mimeType', 'filename', 'filePath'] as const
 
 /**
  * Namespace under which data in the ActionContext will be stored.
